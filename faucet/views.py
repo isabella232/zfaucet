@@ -99,6 +99,7 @@ def index(request):
             # Sprout
             elif len(address) == len('ztSwdDwPhpUZ447YU1BqjxrvutHfu2AyENwUohhTMhnWHreAEHTELhRLvqkARmCSudW1GAcrg58TVaqT7oTH1ohFA7k7V11'):
                 # sender = 'ztSwdDwPhpUZ447YU1BqjxrvutHfu2AyENwUohhTMhnWHreAEHTELhRLvqkARmCSudW1GAcrg58TVaqT7oTH1ohFA7k7V11'
+                print 'Sprout'
                 zaddrs = zd.z_listaddresses()
                 sender = zaddrs[0]
                 msg = 'Thanks for using zfaucet!'
