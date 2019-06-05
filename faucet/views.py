@@ -56,9 +56,9 @@ def index(request):
 
             # TODO: keep track of sessions as well, track one per session?
 
-            if timesince < (60*60*12):
-                msg = "Sorry, you received a payout too recently.  Come back later."
-                return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
+            #if timesince < (60*60*12):
+                #msg = "Sorry, you received a payout too recently.  Come back later."
+                #return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
 
         except (Drip.DoesNotExist, IndexError) as e:
             # Nothing in queryset, so we've never seen this ip and address before (individually)
@@ -77,8 +77,11 @@ def index(request):
                     msg = "Sent! txid: {0}. View your transaction on the testnet explorer.".format(tx)
                     return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
             # Sapling address
-            elif len(address) == len('ztestsapling1rguzakncjtyv7d74qy4gx70d8p0dj0z5lsz5tnmwef2dy6a43zjw4hrwvqnzfy8gxt8ssjq4s2y'):
-                sender = zd.find_taddr_with_unspent()
+            elif len(address) == len('ztestsapling1603ydy9hg79lv5sv9pm5hn95cngfv4qpd6y54a8wkyejn72jl30a4pfhw8u00p93mu4nj6qxsqg'):
+                print 'Sapling addr'
+                # sender = 'ztestsapling1603ydy9hg79lv5sv9pm5hn95cngfv4qpd6y54a8wkyejn72jl30a4pfhw8u00p93mu4nj6qxsqg'
+                zaddrs = zd.z_listaddresses()
+                sender = zaddrs[1]
                 msg = 'Thanks for using zfaucet!'
                 opid = zd.z_sendmany(sender, address, 1.0, msg)
                 print "OPID", opid
@@ -86,15 +89,16 @@ def index(request):
                         resp = zd.z_getoperationstatus(opid)
                         print "Operation status response:", resp
                         print "operation status: ", resp[0]['status']
+                        #why is it not working when it's executing?
                         if resp[0]['status'] == 'executing':
-                            msg = "Sapling transaction sent!"
+                            msg = "Sent! Get the status of your private payout with z_getoperationstatus '[\"{0}\"]'.".format(opid)
                             return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
                         if resp[0]['status'] == 'failed':
                             msg = "Operation failed for {0}. Error message: {1}".format(opid, resp[0]['error']['message'])
                             return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
             # Sprout
-            elif len(address) == len('ztbx5DLDxa5ZLFTchHhoPNkKs57QzSyib6UqXpEdy76T1aUdFxJt1w9318Z8DJ73XzbnWHKEZP9Yjg712N5kMmP4QzS9iC9'):
-                # sender = 'ztbx5DLDxa5ZLFTchHhoPNkKs57QzSyib6UqXpEdy76T1aUdFxJt1w9318Z8DJ73XzbnWHKEZP9Yjg712N5kMmP4QzS9iC9'
+            elif len(address) == len('ztSwdDwPhpUZ447YU1BqjxrvutHfu2AyENwUohhTMhnWHreAEHTELhRLvqkARmCSudW1GAcrg58TVaqT7oTH1ohFA7k7V11'):
+                # sender = 'ztSwdDwPhpUZ447YU1BqjxrvutHfu2AyENwUohhTMhnWHreAEHTELhRLvqkARmCSudW1GAcrg58TVaqT7oTH1ohFA7k7V11'
                 zaddrs = zd.z_listaddresses()
                 sender = zaddrs[0]
                 msg = 'Thanks for using zfaucet!'
@@ -118,5 +122,4 @@ def index(request):
             return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
 
 
-    return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':d
-    
+    return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':False, 'message':""})
