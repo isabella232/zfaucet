@@ -56,9 +56,9 @@ def index(request):
 
             # TODO: keep track of sessions as well, track one per session?
 
-            #if timesince < (60*60*12):
-                #msg = "Sorry, you received a payout too recently.  Come back later."
-                #return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
+            if timesince < (60*60*12):
+                msg = "Sorry, you received a payout too recently.  Come back later."
+                return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
 
         except (Drip.DoesNotExist, IndexError) as e:
             # Nothing in queryset, so we've never seen this ip and address before (individually)
@@ -91,7 +91,7 @@ def index(request):
                         print "operation status: ", resp[0]['status']
                         #why is it not working when it's executing?
                         if resp[0]['status'] == 'executing':
-                            msg = "Sent! Get the status of your private payout with z_getoperationstatus '[\"{0}\"]'.".format(opid)
+                            msg = "Sent! You should receive your Sapling funds shortly."
                             return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
                         if resp[0]['status'] == 'failed':
                             msg = "Operation failed for {0}. Error message: {1}".format(opid, resp[0]['error']['message'])
@@ -110,7 +110,7 @@ def index(request):
                         print "operation status: ", resp[0]['status']
                         #why is it not working when it's executing?
                         if resp[0]['status'] == 'executing':
-                            msg = "Sent! Get the status of your private payout with z_getoperationstatus '[\"{0}\"]'.".format(opid)
+                            msg = "Sent! You should receive your Sprout funds shortly."
                             return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
                         if resp[0]['status'] == 'failed':
                             msg = "Operation failed for {0}. Error message: {1}".format(opid, resp[0]['error']['message'])
