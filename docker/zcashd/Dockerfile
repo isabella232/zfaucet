@@ -17,3 +17,6 @@ ADD zcash.conf /home/$ZCASHD_USER/.zcash/zcash.conf
 RUN chown -R $ZCASHD_USER:$ZCASHD_USER /home/$ZCASHD_USER
 USER zcashd
 WORKDIR /home/zcashd
+
+HEALTHCHECK --interval=5m --timeout=3s \
+    CMD zcash-cli getinfo || exit 1
