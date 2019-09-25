@@ -6,4 +6,4 @@ ADD . /app
 RUN pip install -r requirements.txt && \
     pip install -r requirements-prod.txt  
 
-#ENTRYPOINT ["docker/zfaucet/entrypoint.sh"]
+ENTRYPOINT ["docker/zfaucet/entrypoint.sh"]
