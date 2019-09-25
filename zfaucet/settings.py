@@ -30,9 +30,11 @@ print 'settings environment is ' + ENVIRONMENT
 #else:
 
 # These secrets are written by Ansible during provisioning.
-SECRET_KEY = ''
-DJANGO_POSTGRESQL_PASSWORD = ''
-
+SECRET_KEY = os.getenv('SECRET_KEY', 'badsecret')
+DJANGO_POSTGRESQL_USER = os.getenv('DJANGO_POSTGRESQL_USER', 'django')
+DJANGO_POSTGRESQL_PASSWORD = os.getenv('DJANGO_POSTGRESQL_PASSWORD', '')
+DJANGO_POSTGRESQL_HOST = os.getenv('DJANGO_POSTGRESQL_HOST', 'localhost')
+ZCASH_NETWORK = os.getenv('ZCASH_NETWORK', 'http://localhost:18232')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = ENVIRONMENT == 'dev'
 
@@ -102,9 +104,9 @@ else:
                 'default': {
                         'ENGINE': 'django.db.backends.postgresql_psycopg2',
                         'NAME': 'django',
-                        'USER': 'django',
+                        'USER': DJANGO_POSTGRESQL_USER,
                         'PASSWORD': DJANGO_POSTGRESQL_PASSWORD,
-                        'HOST': '127.0.0.1',
+                        'HOST': DJANGO_POSTGRESQL_HOST,
                         'PORT': '5432',
                         'CONN_MAX_AGE': 3600,
                 },

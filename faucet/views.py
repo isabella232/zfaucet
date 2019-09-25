@@ -35,7 +35,7 @@ def index(request):
         difficulty = '0'
         height = '0'
 
-    zd = ZDaemon()
+    zd = ZDaemon(network=ZCASH_NETWORK)
     version = zd.getVersion()
 
     #If it is a post, an address was submitted.
