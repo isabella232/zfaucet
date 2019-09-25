@@ -20,8 +20,6 @@ services:
       - zfaucet
   zfaucet:
     build: .
-    #command: python manage.py runserver 0.0.0.0:8000
-    command: gunicorn --bind=0.0.0.0:8000 --workers=2 zfaucet.wsgi 
     ports:
       - "8000:8000"
     depends_on:
