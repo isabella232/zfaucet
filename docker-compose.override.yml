@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+
+  zfaucet:
+    image: python:2
+    volumes:
+      - .:/app
+    entrypoint: bash -c "sleep infinity"

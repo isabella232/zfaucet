@@ -46,6 +46,7 @@ ALLOWED_HOSTS = ['faucet.testnet.z.cash', '127.0.0.1']
 
 INSTALLED_APPS = [
     'faucet',
+    'zfaucet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
