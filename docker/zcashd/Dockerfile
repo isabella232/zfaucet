@@ -20,3 +20,4 @@ WORKDIR /home/zcashd
 
 HEALTHCHECK --interval=5m --timeout=3s \
     CMD zcash-cli getinfo || exit 1
+
