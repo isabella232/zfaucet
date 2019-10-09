@@ -8,6 +8,7 @@ RUN pip install -r requirements.txt && \
 
 RUN useradd -d /home/zfaucet -s /bin/bash zfaucet \
     && mkdir -p /home/zfaucet \
+    && mkdir -p /home/zcashd/zfaucet/faucet/static \
     && chown zfaucet /app/faucet/migrations \
     && chown zfaucet /home/zcashd/zfaucet/faucet/static
 
