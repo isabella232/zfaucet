@@ -56,8 +56,8 @@ def index(request):
 
             # TODO: keep track of sessions as well, track one per session?
 
-            if timesince < (60*60):
-                msg = "Sorry, you received a payout too recently.  Come back in an hour."
+            if timesince < (60*60*12):
+                msg = "Sorry, you received a payout too recently.  Come back later."
                 return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
 
         except (Drip.DoesNotExist, IndexError) as e:
@@ -67,20 +67,23 @@ def index(request):
         # zd = ZDaemon()
         try:
             # Did the tx work?
+            # Transparent address
             if len(address) == len('tmKBPqa8qqKA7vrGq1AaXHSAr9vqa3GczzK'):
-                tx = zd.sendtoaddress(address, 3.0)
+                tx = zd.sendtoaddress(address, 10.0)
                 if len(tx) == len('2ac64e297e3910e7ffda7210e7aa2463fe2ec5f69dfe7fdf0b4b9be138a9bfb8'):
                     #Save Drip.
                     drip = Drip(address=address,txid=tx,ip=ip)
                     drip.save()
                     msg = "Sent! txid: {0}. View your transaction on the testnet explorer.".format(tx)
                     return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
-            elif len(address) == len('ztbx5DLDxa5ZLFTchHhoPNkKs57QzSyib6UqXpEdy76T1aUdFxJt1w9318Z8DJ73XzbnWHKEZP9Yjg712N5kMmP4QzS9iC9'):
-                # sender = 'ztbx5DLDxa5ZLFTchHhoPNkKs57QzSyib6UqXpEdy76T1aUdFxJt1w9318Z8DJ73XzbnWHKEZP9Yjg712N5kMmP4QzS9iC9'
+            # Sapling address
+            elif len(address) == len('ztestsapling1603ydy9hg79lv5sv9pm5hn95cngfv4qpd6y54a8wkyejn72jl30a4pfhw8u00p93mu4nj6qxsqg'):
+                print 'Sapling addr'
+                # sender = 'ztestsapling1603ydy9hg79lv5sv9pm5hn95cngfv4qpd6y54a8wkyejn72jl30a4pfhw8u00p93mu4nj6qxsqg'
                 zaddrs = zd.z_listaddresses()
-                sender = zaddrs[0]
+                sender = zaddrs[1]
                 msg = 'Thanks for using zfaucet!'
-                opid = zd.z_sendmany(sender, address, 1.0, msg)
+                opid = zd.z_sendmany(sender, address, 10.0, msg)
                 print "OPID", opid
                 if opid != None and 'opid' in opid:
                         resp = zd.z_getoperationstatus(opid)
@@ -88,7 +91,27 @@ def index(request):
                         print "operation status: ", resp[0]['status']
                         #why is it not working when it's executing?
                         if resp[0]['status'] == 'executing':
-                            msg = "Sent! Get the status of your private payout with z_getoperationstatus '[\"{0}\"]'.".format(opid)
+                            msg = "Sent! You should receive your Sapling funds shortly."
+                            return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
+                        if resp[0]['status'] == 'failed':
+                            msg = "Operation failed for {0}. Error message: {1}".format(opid, resp[0]['error']['message'])
+                            return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
+            # Sprout
+            elif len(address) == len('ztSwdDwPhpUZ447YU1BqjxrvutHfu2AyENwUohhTMhnWHreAEHTELhRLvqkARmCSudW1GAcrg58TVaqT7oTH1ohFA7k7V11'):
+                # sender = 'ztSwdDwPhpUZ447YU1BqjxrvutHfu2AyENwUohhTMhnWHreAEHTELhRLvqkARmCSudW1GAcrg58TVaqT7oTH1ohFA7k7V11'
+                print 'Sprout'
+                zaddrs = zd.z_listaddresses()
+                sender = zaddrs[0]
+                msg = 'Thanks for using zfaucet!'
+                opid = zd.z_sendmany(sender, address, 10.0, msg)
+                print "OPID", opid
+                if opid != None and 'opid' in opid:
+                        resp = zd.z_getoperationstatus(opid)
+                        print "Operation status response:", resp
+                        print "operation status: ", resp[0]['status']
+                        #why is it not working when it's executing?
+                        if resp[0]['status'] == 'executing':
+                            msg = "Sent! You should receive your Sprout funds shortly."
                             return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
                         if resp[0]['status'] == 'failed':
                             msg = "Operation failed for {0}. Error message: {1}".format(opid, resp[0]['error']['message'])
