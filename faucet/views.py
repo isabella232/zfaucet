@@ -69,7 +69,7 @@ def index(request):
             # Did the tx work?
             # Transparent address
             if len(address) == len('tmKBPqa8qqKA7vrGq1AaXHSAr9vqa3GczzK'):
-                tx = zd.sendtoaddress(address, 10.0)
+                tx = zd.sendtoaddress(address, 1.0)
                 if len(tx) == len('2ac64e297e3910e7ffda7210e7aa2463fe2ec5f69dfe7fdf0b4b9be138a9bfb8'):
                     #Save Drip.
                     drip = Drip(address=address,txid=tx,ip=ip)
@@ -83,7 +83,7 @@ def index(request):
                 zaddrs = zd.z_listaddresses()
                 sender = zaddrs[1]
                 msg = 'Thanks for using zfaucet!'
-                opid = zd.z_sendmany(sender, address, 10.0, msg)
+                opid = zd.z_sendmany(sender, address, 1.0, msg)
                 print "OPID", opid
                 if opid != None and 'opid' in opid:
                         resp = zd.z_getoperationstatus(opid)
@@ -103,7 +103,7 @@ def index(request):
                 zaddrs = zd.z_listaddresses()
                 sender = zaddrs[0]
                 msg = 'Thanks for using zfaucet!'
-                opid = zd.z_sendmany(sender, address, 10.0, msg)
+                opid = zd.z_sendmany(sender, address, 1.0, msg)
                 print "OPID", opid
                 if opid != None and 'opid' in opid:
                         resp = zd.z_getoperationstatus(opid)
