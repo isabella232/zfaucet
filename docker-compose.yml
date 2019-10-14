@@ -19,14 +19,13 @@ services:
     depends_on:
       - zfaucet
   zfaucet:
-    build: .
+    image: ecc/zfaucet
     ports:
       - "8000:8000"
     depends_on:
       - db
       - zcashd
     volumes:
-      - .:/app
       - static_volume:/home/zcashd/zfaucet/faucet/static
     environment:
       DJANGO_ENVIRONMENT: $ENVIRONMENT
