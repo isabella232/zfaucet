@@ -24,8 +24,8 @@ def index(request):
         hc = HealthCheck.objects.latest('timestamp')
         t_balance = hc.t_balance
         z_balance = hc.z_balance
-        print "T balance", t_balance
-        print " z balance", z_balance
+        print('T balance'.format(t_balance))
+        print('z balance"'.format(z_balance))
         balance = {'transparent': t_balance, 'private': z_balance}
         difficulty = hc.difficulty
         height = hc.height
@@ -47,8 +47,8 @@ def index(request):
             ip = request.META.get('HTTP_X_REAL_IP')
         ip = get_client_ip(request)
         address = request.POST.get('address', '')
-        print "IP: ", ip
-        print "address: ", address
+        print('client IP: {}'.format(ip))
+        print('client address: {}'.format(address))
         try:
             last_payout = Drip.objects.filter(Q(ip=ip) | Q(address=address)).order_by('-timestamp')[0]
             now = datetime.utcnow().replace(tzinfo=timezone.get_current_timezone())
@@ -78,17 +78,17 @@ def index(request):
                     return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
             # Sapling address
             elif len(address) == len('ztestsapling1603ydy9hg79lv5sv9pm5hn95cngfv4qpd6y54a8wkyejn72jl30a4pfhw8u00p93mu4nj6qxsqg'):
-                print 'Sapling addr'
+                print('Received a Sapling address')
                 # sender = 'ztestsapling1603ydy9hg79lv5sv9pm5hn95cngfv4qpd6y54a8wkyejn72jl30a4pfhw8u00p93mu4nj6qxsqg'
                 zaddrs = zd.z_listaddresses()
                 sender = zaddrs[1]
                 msg = 'Thanks for using zfaucet!'
                 opid = zd.z_sendmany(sender, address, 1.0, msg)
-                print "OPID", opid
+                print('OPID: {}'.format(opid))
                 if opid != None and 'opid' in opid:
                         resp = zd.z_getoperationstatus(opid)
-                        print "Operation status response:", resp
-                        print "operation status: ", resp[0]['status']
+                        print('Operation status response: {}'.format(resp))
+                        print('operation status: {}'.format(resp[0]['status']))
                         #why is it not working when it's executing?
                         if resp[0]['status'] == 'executing':
                             msg = "Sent! You should receive your Sapling funds shortly."
@@ -99,16 +99,16 @@ def index(request):
             # Sprout
             elif len(address) == len('ztSwdDwPhpUZ447YU1BqjxrvutHfu2AyENwUohhTMhnWHreAEHTELhRLvqkARmCSudW1GAcrg58TVaqT7oTH1ohFA7k7V11'):
                 # sender = 'ztSwdDwPhpUZ447YU1BqjxrvutHfu2AyENwUohhTMhnWHreAEHTELhRLvqkARmCSudW1GAcrg58TVaqT7oTH1ohFA7k7V11'
-                print 'Sprout'
+                print('Received a Sprout address')
                 zaddrs = zd.z_listaddresses()
                 sender = zaddrs[0]
                 msg = 'Thanks for using zfaucet!'
                 opid = zd.z_sendmany(sender, address, 1.0, msg)
-                print "OPID", opid
+                print('OPID: {}'.format(opid))
                 if opid != None and 'opid' in opid:
                         resp = zd.z_getoperationstatus(opid)
-                        print "Operation status response:", resp
-                        print "operation status: ", resp[0]['status']
+                        print('Operation status response: {}'.format(resp))
+                        print('operation status: {}'.format(resp[0]['status']))
                         #why is it not working when it's executing?
                         if resp[0]['status'] == 'executing':
                             msg = "Sent! You should receive your Sprout funds shortly."
@@ -118,7 +118,7 @@ def index(request):
                             return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
         except:
             # TODO: Give better error if faucet is empty!
-            print "IN ERROR"
+            print('ERROR: unknow address format')
             msg = "Issue sending transaction.  Is your address correct?"
             return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
 

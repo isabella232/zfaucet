@@ -22,7 +22,7 @@ ENVIRONMENT = os.getenv('DJANGO_ENVIRONMENT', 'prod')
 # ENVIRONMENT = os.getenv('DJANGO_ENVIRONMENT', 'dev')
 if ENVIRONMENT not in ['dev', 'stage', 'prod']:
         raise Exception('Unknown settings environment "%s"' % ENVIRONMENT)
-print 'settings environment is ' + ENVIRONMENT
+print('settings environment is {}'.format(ENVIRONMENT))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #if ENVIRONMENT == 'prod':

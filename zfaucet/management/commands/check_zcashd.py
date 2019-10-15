@@ -20,8 +20,10 @@ class Command(BaseCommand):
             timer += 1
             try:
                 zd.getNetworkHeight()
+                height = zd.getNetworkHeight()
+                assert type(height) is int
                 return
-            except requests.exceptions.ConnectionError as e:  # This is the correct syntax
+            except (requests.exceptions.ConnectionError,AssertionError):
                 pass
             self.stdout.write('Waiting {:d}s, elapsed {:d}s'.format(wait, timer) )
         self.stderr.write('Unable to connect to zcash at: {} within {:d}s'.format(zd.network, wait))
