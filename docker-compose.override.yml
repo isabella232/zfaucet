@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  nginx:
+  web:
     build:
       context: docker/nginx
   zfaucet:

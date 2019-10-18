@@ -9,8 +9,7 @@ services:
       POSTGRES_USER: django
     ports:
       - "5432:5432"   
-  nginx:
-    image: nginx
+  web:
     ports:
       - "80:80"
       - "443:443"
@@ -19,7 +18,6 @@ services:
     depends_on:
       - zfaucet
   zfaucet:
-    image: ecc/zfaucet
     ports:
       - "8000:8000"
     depends_on:
