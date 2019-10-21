@@ -23,6 +23,7 @@ WORKDIR /home/zcashd
 RUN mkdir -p /home/$ZCASHD_USER/.zcash/ \
     && touch /home/$ZCASHD_USER/.zcash/zcash.conf
 
+ADD entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 HEALTHCHECK --interval=5m --timeout=3s \
     CMD zcash-cli getinfo || exit 1
-
