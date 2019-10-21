@@ -13,15 +13,15 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys $ZCASH_SIG
   && apt-get update \
   && apt-get install -y zcash=$ZCASH_VERSION
 
-RUN useradd --home-dir /home/$ZCASHD_USER \
+RUN useradd --home-dir /srv/$ZCASHD_USER \
             --shell /bin/bash \
             --create-home \
             --uid $ZCASHD_UID\
             $ZCASHD_USER
 USER $ZCASHD_USER
-WORKDIR /home/zcashd
-RUN mkdir -p /home/$ZCASHD_USER/.zcash/ \
-    && touch /home/$ZCASHD_USER/.zcash/zcash.conf
+WORKDIR /srv/zcashd
+RUN mkdir -p /srv/$ZCASHD_USER/.zcash/ \
+    && touch /srv/$ZCASHD_USER/.zcash/zcash.conf
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

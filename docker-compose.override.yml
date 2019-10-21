@@ -1,8 +1,14 @@
 version: '3'
 
 services:
-  web:
+  nginx:
     build:
       context: docker/nginx
   zfaucet:
     build: .
+    volumes:
+      - ./:/app
+      - static_volume:/home/zcashd/zfaucet/faucet/static
+  zcashd:
+    build:
+      context: docker/zcashd

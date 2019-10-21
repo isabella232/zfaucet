@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: django
     ports:
       - "5432:5432"   
-  web:
+  nginx:
     ports:
       - "80:80"
       - "443:443"
@@ -34,14 +34,22 @@ services:
       RPCPASSWORD: $RPCPASSWORD
       ZCASH_NETWORK: http://zcashd:18232
   zcashd:
-    build:
-      context: docker/zcashd
-    command: zcashd
+    environment:
+      ZCASHD_NETWORK: $ZCASHD_NETWORK
+      ZCASHD_SHOWMETRICS: "1"
+      ZCASHD_LOGIPS: "1"
+      ZCASHD_EXPERIMENTALFEATURES: "1"
+      ZCASHD_GEN: "1"
+      ZCASHD_ZSHIELDCOINBASE: "1"
+      ZCASHD_RPCUSER: $RPCUSER
+      ZCASHD_RPCPASSWORD: $RPCPASSWORD
+      ZCASHD_RPCBIND: "0.0.0.0"
+      ZCASHD_ALLOWIP: "0.0.0.0/0"
     ports:
       - "18232:18232"
     volumes:
-      - $ZCASHD_DATADIR:/home/zcashd/.zcash
-      - $ZCASHD_PARMDIR:/home/zcashd/.zcash-params
+      - $ZCASHD_DATADIR:/srv/zcashd/.zcash
+      - $ZCASHD_PARMDIR:/srv/zcashd/.zcash-params
 
 volumes:
   static_volume:
