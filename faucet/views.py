@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import Q
-from django.utils import timezone
+from django.utils import timezone as django_tz
 
 import re
 from datetime import *
@@ -51,7 +51,7 @@ def index(request):
         print('client address: {}'.format(address))
         try:
             last_payout = Drip.objects.filter(Q(ip=ip) | Q(address=address)).order_by('-timestamp')[0]
-            now = datetime.utcnow().replace(tzinfo=timezone.get_current_timezone())
+            now = datetime.utcnow().replace(tzinfo=django_tz.get_current_timezone())
             timesince = (now - last_payout.timestamp).total_seconds()
 
             # TODO: keep track of sessions as well, track one per session?
