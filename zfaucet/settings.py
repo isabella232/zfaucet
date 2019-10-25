@@ -47,13 +47,15 @@ ALLOWED_HOSTS = ['faucet.testnet.z.cash', '127.0.0.1']
 INSTALLED_APPS = [
     'faucet',
     'zfaucet',
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+if ENVIRONMENT == 'dev':
+    INSTALLED_APPS.append('django.contrib.admin')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
