@@ -40,7 +40,7 @@ DEBUG = ENVIRONMENT == 'dev'
 
 
 # production
-ALLOWED_HOSTS = ['faucet.testnet.z.cash', '127.0.0.1']
+ALLOWED_HOSTS = ['faucet.testnet.z.cash', '127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -156,3 +156,4 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_ROOT = '/home/zcashd/zfaucet/faucet/static'
+DONATION_ORG = 'Electric Coin Co'
