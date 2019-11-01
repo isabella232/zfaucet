@@ -13,8 +13,8 @@ def donations(request):
     data = {}
     data['org'] = DONATION_ORG
     data['t_address'] = find_taddr_with_unspent()
-    data['z_address_legacy'] = find_z_sapling_address()
-    data['z_address_sapling'] = find_z_legacy_address()
+    data['z_address_legacy'] = find_z_legacy_address()
+    data['z_address_sapling'] = find_z_sapling_address()
     return JsonResponse(data)
 
 def find_taddr_with_unspent():
