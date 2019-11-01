@@ -1,2 +1,3 @@
 django
 requests
+git+https://github.com/benzcash/pyZcash@ben/python3-and-packaging

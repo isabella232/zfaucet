@@ -22,7 +22,7 @@ ENVIRONMENT = os.getenv('DJANGO_ENVIRONMENT', 'prod')
 # ENVIRONMENT = os.getenv('DJANGO_ENVIRONMENT', 'dev')
 if ENVIRONMENT not in ['dev', 'stage', 'prod']:
         raise Exception('Unknown settings environment "%s"' % ENVIRONMENT)
-print 'settings environment is ' + ENVIRONMENT
+print('settings environment is {}'.format(ENVIRONMENT))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #if ENVIRONMENT == 'prod':
@@ -30,9 +30,11 @@ print 'settings environment is ' + ENVIRONMENT
 #else:
 
 # These secrets are written by Ansible during provisioning.
-SECRET_KEY = ''
-DJANGO_POSTGRESQL_PASSWORD = ''
-
+SECRET_KEY = os.getenv('SECRET_KEY', 'badsecret')
+DJANGO_POSTGRESQL_USER = os.getenv('DJANGO_POSTGRESQL_USER', 'django')
+DJANGO_POSTGRESQL_PASSWORD = os.getenv('DJANGO_POSTGRESQL_PASSWORD', '')
+DJANGO_POSTGRESQL_HOST = os.getenv('DJANGO_POSTGRESQL_HOST', 'localhost')
+ZCASH_NETWORK = os.getenv('ZCASH_NETWORK', 'http://localhost:18232')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = ENVIRONMENT == 'dev'
 
@@ -44,13 +46,16 @@ ALLOWED_HOSTS = ['faucet.testnet.z.cash', '127.0.0.1']
 
 INSTALLED_APPS = [
     'faucet',
-    'django.contrib.admin',
+    'zfaucet',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+if ENVIRONMENT == 'dev':
+    INSTALLED_APPS.append('django.contrib.admin')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -102,9 +107,9 @@ else:
                 'default': {
                         'ENGINE': 'django.db.backends.postgresql_psycopg2',
                         'NAME': 'django',
-                        'USER': 'django',
+                        'USER': DJANGO_POSTGRESQL_USER,
                         'PASSWORD': DJANGO_POSTGRESQL_PASSWORD,
-                        'HOST': '127.0.0.1',
+                        'HOST': DJANGO_POSTGRESQL_HOST,
                         'PORT': '5432',
                         'CONN_MAX_AGE': 3600,
                 },

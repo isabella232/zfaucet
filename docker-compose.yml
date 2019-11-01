@@ -1,0 +1,55 @@
+---
+version: '3'
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_USER: django
+    ports:
+      - "5432:5432"   
+  nginx:
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - static_volume:/usr/share/nginx/html/static
+    depends_on:
+      - zfaucet
+  zfaucet:
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - zcashd
+    volumes:
+      - static_volume:/home/zcashd/zfaucet/faucet/static
+    environment:
+      DJANGO_ENVIRONMENT: $ENVIRONMENT
+      DJANGO_POSTGRESQL_PASSWORD: $POSTGRES_PASSWORD
+      DJANGO_POSTGRESQL_USER: django
+      DJANGO_POSTGRESQL_HOST: $POSTGRES_HOST
+      RPCUSER: $RPCUSER
+      RPCPASSWORD: $RPCPASSWORD
+      ZCASH_NETWORK: http://zcashd:18232
+  zcashd:
+    environment:
+      ZCASHD_NETWORK: $ZCASHD_NETWORK
+      ZCASHD_SHOWMETRICS: "1"
+      ZCASHD_LOGIPS: "1"
+      ZCASHD_EXPERIMENTALFEATURES: "1"
+      ZCASHD_GEN: $ZCASHD_GEN
+      ZCASHD_ZSHIELDCOINBASE: "1"
+      ZCASHD_RPCUSER: $RPCUSER
+      ZCASHD_RPCPASSWORD: $RPCPASSWORD
+      ZCASHD_RPCBIND: "0.0.0.0"
+      ZCASHD_ALLOWIP: "0.0.0.0/0"
+    ports:
+      - "18232:18232"
+    volumes:
+      - $ZCASHD_DATADIR:/srv/zcashd/.zcash
+      - $ZCASHD_PARMDIR:/srv/zcashd/.zcash-params
+
+volumes:
+  static_volume:

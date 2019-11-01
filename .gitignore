@@ -90,3 +90,6 @@ ENV/
 
 *.sqlite3
 
+.vscode
+.docker
+.env

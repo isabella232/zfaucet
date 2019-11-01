@@ -1,0 +1,12 @@
+version: '3'
+services:
+  nginx:
+    image: gcr.io/zcash-web/github.com/benzcash/zfaucet-nginx:7cea8a4
+    volumes:
+      - /secrets/letsencrypt/faucet.testnet.z.cash.pem:/ssl/faucet.testnet.z.cash.pem
+      - /secrets/letsencrypt/faucet.testnet.z.cash-private.key:/ssl/faucet.testnet.z.cash-private.key
+      - static_volume:/usr/share/nginx/html/static
+  zfaucet:
+    image: gcr.io/zcash-web/github.com/benzcash/zfaucet@sha256:e11400106d121e12bf931145199a2adcb18d7c10e7dbf07aa58b2fe21b450fa5
+  zcashd:
+    image: gcr.io/zcash-web/github.com/benzcash/zfaucet-zcashd@sha256:9ca439a3ff74c17dd72fb08c721e40fd894a8d472bcc1add5dbc6f84134bdca9
