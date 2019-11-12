@@ -29,3 +29,4 @@ while waiting:
         print('Elapsed: {}s'.format(elasped))
 
 print('Connect to {}:{}!'.format(args.host, args.port))
+
