@@ -34,6 +34,7 @@ services:
       RPCPASSWORD: $RPCPASSWORD
       ZCASH_NETWORK: http://zcashd:18232
   zcashd:
+    image: gcr.io/zcash-web/zcashd:latest
     environment:
       ZCASHD_NETWORK: $ZCASHD_NETWORK
       ZCASHD_SHOWMETRICS: "1"

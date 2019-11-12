@@ -40,7 +40,9 @@ DEBUG = ENVIRONMENT == 'dev'
 
 
 # production
-ALLOWED_HOSTS = ['faucet.testnet.z.cash', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['faucet.testnet.z.cash', '127.0.0.1']
+if os.getenv('ZFAUCET_HOSTNAME'):
+    ALLOWED_HOSTS.append(os.getenv('ZFAUCET_HOSTNAME'))
 
 # Application definition
 
