@@ -158,3 +158,4 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_ROOT = '/home/zcashd/zfaucet/faucet/static'
+DONATION_ORG = 'Electric Coin Co'
