@@ -71,6 +71,10 @@ def index(request):
             if len(address) == len('tmKBPqa8qqKA7vrGq1AaXHSAr9vqa3GczzK'):
                 tx = zd.sendtoaddress(address, 1.0)
                 if len(tx) == len('2ac64e297e3910e7ffda7210e7aa2463fe2ec5f69dfe7fdf0b4b9be138a9bfb8'):
+                    #Save Drip.
+                    print('Saving Drip for {address} transaction {txid} from ip: {ip}'.format(address=address,txid=tx,ip=ip))
+                    drip = Drip(address=address,txid=tx,ip=ip)
+                    drip.save()
                     msg = "Sent! txid: {0}. View your transaction on the testnet explorer.".format(tx)
                     return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
             # Sapling address
@@ -118,10 +122,5 @@ def index(request):
             print('ERROR: unknow address format')
             msg = "Issue sending transaction.  Is your address correct?"
             return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
-
-        #Save Drip.
-        print('Sacing Drip for {address} transaction {txid} from ip: {ip}'.format(address=address,txid=tx,ip=ip))
-        drip = Drip(address=address,txid=tx,ip=ip)
-        drip.save()
 
     return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':False, 'message':""})
