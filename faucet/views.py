@@ -77,7 +77,6 @@ def index(request):
                     drip.save()
                     msg = "Sent! txid: {0}. View your transaction on the testnet explorer.".format(tx)
                     return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
-
             # Sapling address
             elif len(address) == len('ztestsapling1603ydy9hg79lv5sv9pm5hn95cngfv4qpd6y54a8wkyejn72jl30a4pfhw8u00p93mu4nj6qxsqg'):
                 print('Received a Sapling address')
@@ -123,7 +122,5 @@ def index(request):
             print('ERROR: unknow address format')
             msg = "Issue sending transaction.  Is your address correct?"
             return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':True, 'message':msg})
-
-
 
     return render(request, 'faucet/faucet.html', {'version':version,'balance':balance,'difficulty':difficulty,'height':height, 'payouts':payouts, 'flash':False, 'message':""})
